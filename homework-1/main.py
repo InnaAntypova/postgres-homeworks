@@ -39,7 +39,7 @@ def write_employees_data():
                             cur.execute("INSERT INTO employees_data VALUES (%s, %s, %s, %s, %s, %s)", i)
 
                 except TypeError:
-                    print("Ошибка записи в таблицу customers_data")
+                    print("Ошибка записи в таблицу employees_data")
                 finally:
                     conn.close()
     except FileNotFoundError:
@@ -61,7 +61,7 @@ def write_orders_data():
                             cur.execute("INSERT INTO orders_data VALUES (%s, %s, %s, %s, %s)", i)
 
                 except TypeError:
-                    print("Ошибка записи в таблицу customers_data")
+                    print("Ошибка записи в таблицу orders_data")
                 finally:
                     conn.close()
     except FileNotFoundError:
