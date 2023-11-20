@@ -30,7 +30,9 @@ def main():
                 insert_suppliers_data(cur, suppliers)
                 print("Данные в suppliers успешно добавлены")
 
-                add_foreign_keys(cur, json_file)
+                update_products(cur, json_file)
+                print("Данные в products обновлены")
+                add_foreign_keys(cur)
                 print(f"FOREIGN KEY успешно добавлены")
 
     except(Exception, psycopg2.DatabaseError) as error:
@@ -95,9 +97,8 @@ def insert_suppliers_data(cur, suppliers: list[dict]) -> None:
                                                                                   address, phone, fax, homepage))
 
 
-
-def add_foreign_keys(cur, json_file) -> None:
-    """Добавляет foreign key со ссылкой на supplier_id в таблицу products."""
+def update_products(cur, json_file) -> None:
+    """Добавляет и обновляет supplier_id в products"""
     cur.execute("ALTER TABLE products ADD COLUMN supplier_id int;")
 
     cur.execute("SELECT product_id, product_name FROM products")
@@ -121,6 +122,9 @@ def add_foreign_keys(cur, json_file) -> None:
                 #print(supplier)
                 cur.execute("UPDATE products SET supplier_id = %s WHERE product_id = %s", (supplier[0], product_id))
 
+
+def add_foreign_keys(cur):
+    """Добавляет foreign key со ссылкой на supplier_id в таблицу products."""
     cur.execute("ALTER TABLE suppliers ADD CONSTRAINT pk_suppliers PRIMARY KEY (supplier_id);"
                 "ALTER TABLE products ADD CONSTRAINT fk_products_supplier_id FOREIGN KEY (supplier_id) "
                 "REFERENCES suppliers (supplier_id);")
